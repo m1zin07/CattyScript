@@ -1,0 +1,275 @@
+-- UI MANAGER
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AutoSpellUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 700, 0, 450)
+mainFrame.Position = UDim2.new(0.5, -350, 0.5, -225)
+mainFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+local shadow = Instance.new("ImageLabel")
+shadow.BackgroundTransparency = 1
+shadow.Position = UDim2.new(0, -15, 0, -15)
+shadow.Size = UDim2.new(1, 30, 1, 30)
+shadow.ZIndex = 0
+shadow.Image = "rbxasset://textures/ui/InGameMenu/Shadow.png"
+shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+shadow.ImageTransparency = 0.5
+shadow.ScaleType = Enum.ScaleType.Slice
+shadow.SliceCenter = Rect.new(10, 10, 118, 118)
+shadow.Parent = mainFrame
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 16)
+mainCorner.Parent = mainFrame
+
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 50)
+titleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+titleBar.BorderSizePixel = 0
+titleBar.Parent = mainFrame
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 16)
+titleCorner.Parent = titleBar
+
+local titleFix = Instance.new("Frame")
+titleFix.Size = UDim2.new(1, 0, 0, 16)
+titleFix.Position = UDim2.new(0, 0, 1, -16)
+titleFix.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+titleFix.BorderSizePixel = 0
+titleFix.Parent = titleBar
+
+local titleText = Instance.new("TextLabel")
+titleText.Size = UDim2.new(1, -20, 1, 0)
+titleText.Position = UDim2.new(0, 20, 0, 0)
+titleText.BackgroundTransparency = 1
+titleText.Text = "✨ Auto Spell System"
+titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleText.TextSize = 22
+titleText.Font = Enum.Font.GothamBold
+titleText.TextXAlignment = Enum.TextXAlignment.Left
+titleText.Parent = titleBar
+
+local sidebar = Instance.new("Frame")
+sidebar.Size = UDim2.new(0, 180, 1, -50)
+sidebar.Position = UDim2.new(0, 0, 0, 50)
+sidebar.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+sidebar.BorderSizePixel = 0
+sidebar.Parent = mainFrame
+
+local sidebarPadding = Instance.new("UIPadding")
+sidebarPadding.PaddingTop = UDim.new(0, 20)
+sidebarPadding.PaddingLeft = UDim.new(0, 15)
+sidebarPadding.PaddingRight = UDim.new(0, 15)
+sidebarPadding.PaddingBottom = UDim.new(0, 20)
+sidebarPadding.Parent = sidebar
+
+local sidebarLayout = Instance.new("UIListLayout")
+sidebarLayout.SortOrder = Enum.SortOrder.LayoutOrder
+sidebarLayout.Padding = UDim.new(0, 12)
+sidebarLayout.Parent = sidebar
+
+local contentArea = Instance.new("Frame")
+contentArea.Size = UDim2.new(1, -180, 1, -50)
+contentArea.Position = UDim2.new(0, 180, 0, 50)
+contentArea.BackgroundTransparency = 1
+contentArea.Parent = mainFrame
+
+local contentPadding = Instance.new("UIPadding")
+contentPadding.PaddingTop = UDim.new(0, 25)
+contentPadding.PaddingLeft = UDim.new(0, 25)
+contentPadding.PaddingRight = UDim.new(0, 25)
+contentPadding.PaddingBottom = UDim.new(0, 25)
+contentPadding.Parent = contentArea
+
+local sectionTitle = Instance.new("TextLabel")
+sectionTitle.Size = UDim2.new(1, 0, 0, 35)
+sectionTitle.BackgroundTransparency = 1
+sectionTitle.Text = "Auto Spell"
+sectionTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+sectionTitle.TextSize = 28
+sectionTitle.Font = Enum.Font.GothamBold
+sectionTitle.TextXAlignment = Enum.TextXAlignment.Left
+sectionTitle.Parent = contentArea
+
+local wordContainer = Instance.new("Frame")
+wordContainer.Size = UDim2.new(1, 0, 0, 65)
+wordContainer.Position = UDim2.new(0, 0, 0, 50)
+wordContainer.BackgroundColor3 = Color3.fromRGB(55, 55, 60)
+wordContainer.BorderSizePixel = 0
+wordContainer.Parent = contentArea
+
+local wordCorner = Instance.new("UICorner")
+wordCorner.CornerRadius = UDim.new(0, 12)
+wordCorner.Parent = wordContainer
+
+local wordPadding = Instance.new("UIPadding")
+wordPadding.PaddingTop = UDim.new(0, 15)
+wordPadding.PaddingLeft = UDim.new(0, 20)
+wordPadding.PaddingRight = UDim.new(0, 20)
+wordPadding.PaddingBottom = UDim.new(0, 15)
+wordPadding.Parent = wordContainer
+
+local wordLabel = Instance.new("TextLabel")
+wordLabel.Size = UDim2.new(1, 0, 0, 18)
+wordLabel.BackgroundTransparency = 1
+wordLabel.Text = "Detected Word:"
+wordLabel.TextColor3 = Color3.fromRGB(180, 180, 185)
+wordLabel.TextSize = 14
+wordLabel.Font = Enum.Font.Gotham
+wordLabel.TextXAlignment = Enum.TextXAlignment.Left
+wordLabel.Parent = wordContainer
+
+local wordDisplay = Instance.new("TextLabel")
+wordDisplay.Size = UDim2.new(1, 0, 1, -22)
+wordDisplay.Position = UDim2.new(0, 0, 0, 22)
+wordDisplay.BackgroundTransparency = 1
+wordDisplay.Text = "Waiting..."
+wordDisplay.TextColor3 = Color3.fromRGB(100, 200, 255)
+wordDisplay.TextSize = 24
+wordDisplay.Font = Enum.Font.GothamBold
+wordDisplay.TextXAlignment = Enum.TextXAlignment.Left
+wordDisplay.Parent = wordContainer
+
+local spellingContainer = Instance.new("Frame")
+spellingContainer.Size = UDim2.new(1, 0, 1, -135)
+spellingContainer.Position = UDim2.new(0, 0, 0, 135)
+spellingContainer.BackgroundColor3 = Color3.fromRGB(55, 55, 60)
+spellingContainer.BorderSizePixel = 0
+spellingContainer.Parent = contentArea
+
+local spellingCorner = Instance.new("UICorner")
+spellingCorner.CornerRadius = UDim.new(0, 12)
+spellingCorner.Parent = spellingContainer
+
+local spellingPadding = Instance.new("UIPadding")
+spellingPadding.PaddingTop = UDim.new(0, 20)
+spellingPadding.PaddingLeft = UDim.new(0, 20)
+spellingPadding.PaddingRight = UDim.new(0, 20)
+spellingPadding.PaddingBottom = UDim.new(0, 20)
+spellingPadding.Parent = spellingContainer
+
+local spellingDisplay = Instance.new("TextLabel")
+spellingDisplay.Size = UDim2.new(1, 0, 1, 0)
+spellingDisplay.BackgroundTransparency = 1
+spellingDisplay.Text = ""
+spellingDisplay.TextColor3 = Color3.fromRGB(100, 255, 150)
+spellingDisplay.TextSize = 36
+spellingDisplay.Font = Enum.Font.GothamBold
+spellingDisplay.TextWrapped = true
+spellingDisplay.TextXAlignment = Enum.TextXAlignment.Left
+spellingDisplay.TextYAlignment = Enum.TextYAlignment.Top
+spellingDisplay.Parent = spellingContainer
+
+local function createButton(text, icon, order, callback)
+	local button = Instance.new("TextButton")
+	button.Size = UDim2.new(1, 0, 0, 45)
+	button.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+	button.BorderSizePixel = 0
+	button.AutoButtonColor = false
+	button.Text = ""
+	button.LayoutOrder = order
+	button.Parent = sidebar
+	
+	local btnCorner = Instance.new("UICorner")
+	btnCorner.CornerRadius = UDim.new(0, 10)
+	btnCorner.Parent = button
+	
+	local btnText = Instance.new("TextLabel")
+	btnText.Size = UDim2.new(1, -45, 1, 0)
+	btnText.Position = UDim2.new(0, 45, 0, 0)
+	btnText.BackgroundTransparency = 1
+	btnText.Text = text
+	btnText.TextColor3 = Color3.fromRGB(200, 200, 205)
+	btnText.TextSize = 16
+	btnText.Font = Enum.Font.GothamMedium
+	btnText.TextXAlignment = Enum.TextXAlignment.Left
+	btnText.Parent = button
+	
+	local iconLabel = Instance.new("TextLabel")
+	iconLabel.Size = UDim2.new(0, 35, 1, 0)
+	iconLabel.Position = UDim2.new(0, 5, 0, 0)
+	iconLabel.BackgroundTransparency = 1
+	iconLabel.Text = icon
+	iconLabel.TextColor3 = Color3.fromRGB(200, 200, 205)
+	iconLabel.TextSize = 20
+	iconLabel.Font = Enum.Font.GothamBold
+	iconLabel.Parent = button
+	
+	button.MouseEnter:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(65, 65, 70)}):Play()
+	end)
+	
+	button.MouseLeave:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 55)}):Play()
+	end)
+	
+	if callback then
+		button.MouseButton1Click:Connect(callback)
+	end
+end
+
+createButton("Home", "🏠", 1, function()
+	sectionTitle.Text = "Home"
+	wordContainer.Visible = false
+	spellingContainer.Visible = false
+end)
+
+createButton("Auto Spell", "✨", 2, function()
+	sectionTitle.Text = "Auto Spell"
+	wordContainer.Visible = true
+	spellingContainer.Visible = true
+end)
+
+createButton("Settings", "⚙️", 3, function()
+	sectionTitle.Text = "Settings"
+	wordContainer.Visible = false
+	spellingContainer.Visible = false
+end)
+
+createButton("About", "ℹ️", 4, function()
+	sectionTitle.Text = "About"
+	wordContainer.Visible = false
+	spellingContainer.Visible = false
+end)
+
+local dragging, dragInput, dragStart, startPos
+
+mainFrame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = mainFrame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+mainFrame.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		local delta = input.Position - dragStart
+		mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+end)
+
+_G.AutoSpellUI = {ScreenGui = screenGui, WordDisplay = wordDisplay, SpellingDisplay = spellingDisplay}
+print("✅ UI Manager loaded")
