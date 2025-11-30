@@ -1,0 +1,25 @@
+-- ============================================
+-- AUTO SPELL SYSTEM - MAIN
+-- ============================================
+
+print("🚀 Auto Spell Main - Loading components...")
+
+local BASE_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/roblox-auto-spell-system/main/"
+
+local scripts = {
+    UIManager = BASE_URL .. "UIManager.lua",
+    SpellDetector = BASE_URL .. "SpellDetector.lua"
+}
+
+for name, url in pairs(scripts) do
+    spawn(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(url))()
+        end)
+        if success then
+            print("✅ " .. name .. " loaded")
+        else
+            warn("❌ " .. name .. " failed: " .. tostring(err))
+        end
+    end)
+end
