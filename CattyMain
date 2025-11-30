@@ -7,7 +7,7 @@ print("🚀 Auto Spell Main - Loading components...")
 local BASE_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/roblox-auto-spell-system/main/"
 
 local scripts = {
-    UIManager = BASE_URL .. "UIManager.lua",
+    UIManager = "https://raw.githubusercontent.com/m1zin07/CattyScript/refs/heads/main/CattyUI"
     SpellDetector = BASE_URL .. "SpellDetector.lua"
 }
 
