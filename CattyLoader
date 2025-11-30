@@ -1,0 +1,10 @@
+-- ============================================
+-- AUTO SPELL SYSTEM - LOADER
+-- Execute: loadstring(game:HttpGet("YOUR_RAW_URL"))()
+-- ============================================
+
+print("🔗 Loading Auto Spell System...")
+
+local MAIN_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/roblox-auto-spell-system/main/Main.lua"
+
+loadstring(game:HttpGet(MAIN_URL))()
