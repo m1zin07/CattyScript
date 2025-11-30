@@ -1,0 +1,57 @@
+-- SPELL DETECTOR
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+repeat task.wait() until _G.AutoSpellUI
+
+local wordDisplay = _G.AutoSpellUI.WordDisplay
+local spellingDisplay = _G.AutoSpellUI.SpellingDisplay
+local isAnimating = false
+local currentWord = ""
+
+local function animateSpelling(word)
+	if isAnimating or word == currentWord then return end
+	isAnimating = true
+	currentWord = word
+	
+	wordDisplay.Text = word
+	spellingDisplay.Text = ""
+	
+	for i = 1, #word do
+		spellingDisplay.Text = spellingDisplay.Text .. word:sub(i, i)
+		task.wait(0.12)
+		if i < #word then
+			spellingDisplay.Text = spellingDisplay.Text .. " - "
+		end
+	end
+	
+	task.wait(0.5)
+	isAnimating = false
+end
+
+local function shouldDetect(obj)
+	if not (obj:IsA("TextLabel") or obj:IsA("TextButton")) then return false end
+	if _G.AutoSpellUI and obj:IsDescendantOf(_G.AutoSpellUI.ScreenGui) then return false end
+	if obj:IsDescendantOf(player.PlayerGui) then return false end
+	if obj:IsDescendantOf(workspace) then return true end
+	return false
+end
+
+local function monitorText(obj)
+	if not shouldDetect(obj) then return end
+	obj:GetPropertyChangedSignal("Text"):Connect(function()
+		local text = obj.Text
+		if not text or #text < 3 then return end
+		local word = text:match("%a+")
+		if word and #word >= 3 then
+			animateSpelling(word)
+		end
+	end)
+end
+
+for _, obj in pairs(workspace:GetDescendants()) do
+	monitorText(obj)
+end
+
+workspace.DescendantAdded:Connect(monitorText)
+print("✅ Spell Detector loaded")
